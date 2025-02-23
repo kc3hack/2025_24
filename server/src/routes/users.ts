@@ -23,7 +23,7 @@ const upload = multer({
 }).single('profile_image');
 
 // ユーザー情報を取得
-router.get('/profile', async (req: Request, res: Response) => {
+router.get('/:id/profile', async (req: Request, res: Response) => {
   try {
     const db = await getDb();
     const user = await db.get(

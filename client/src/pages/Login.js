@@ -30,7 +30,8 @@ const Login = () => {
     }
 
     try {
-      await login(formData.email, formData.password);
+      const response = await login(formData.email, formData.password);
+      console.log("取得したデータ:", response.data);
       alert("ログイン成功！");
       navigate("/");
     } catch (error) {

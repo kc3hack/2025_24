@@ -8,6 +8,7 @@ import Register from "./pages/Register";
 import Question from "./pages/Question";
 import Result from "./pages/Result";
 import Footer from "./components/Footer";
+import { UserProvider } from './context/UserContext';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL;
 
@@ -51,10 +52,12 @@ function App() {
   }, []);
 
   return (
+    <UserProvider>
     <Router>
       {message && <h1>{message}</h1>}
       <AppContent />
     </Router>
+    </UserProvider>
   );
 }
 

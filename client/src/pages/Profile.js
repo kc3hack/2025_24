@@ -1,8 +1,27 @@
 import { Box, Flex, VStack, Text, Image } from "@yamada-ui/react";
 import { useNavigate } from "react-router-dom";
+import { useUser } from '../context/UserContext';
+import { fetchUserData } from "../api/api";
+import { useState, useEffect } from 'react';
 
 const Profile = () => {
   const navigate = useNavigate();
+  const { userId } = useUser();  // ContextからuserDataを取得
+  const [userData, setUserData] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await fetchUserData(userId);
+      setUserData(data);
+    };
+    fetchData();
+  }, [userId]);
+
+  if (!userData) {
+    return <Text>Loading...</Text>;  // データがロードされるまでの間、Loadingメッセージを表示
+  }
+  
+  console.log(userData)
 
   return (
     <Flex justify="center" align="center" minH="100vh" p="4">
@@ -20,12 +39,12 @@ const Profile = () => {
         >
           <Flex align="center" justify="center">
             <Box textAlign="left">
-              <Text fontSize="xl" fontWeight="bold">のんのん</Text>
-              <Text color="gray.600">@012-345-678</Text>
-              <Text fontSize="sm" color="gray.500">2022年12月に参加</Text>
+              <Text fontSize="xl" fontWeight="bold">{userData.data.name}</Text>
+              <Text color="gray.600">{userData.data.mail_address}</Text>
+              <Text fontSize="sm" color="gray.500">{userData.data.created_at}に参加</Text>
             </Box>
             <Image 
-              src="/assets/nonnon.png"
+              src={userData.profile_image_url || "/assets/nonnon.png"}
               alt="ユーザーアイコン"
               borderRadius="full"
               width="80px"
@@ -48,7 +67,7 @@ const Profile = () => {
             <Text fontWeight="bold">連続記録</Text>
             <Flex align="center">
               <Image src="/assets/icon-fire.png" alt="連続記録" width="20px" height="20px" />
-              <Text ml="2">169</Text>
+              <Text ml="2">{userData.data.current_streak}</Text>
             </Flex>
           </Flex>
 
@@ -56,7 +75,7 @@ const Profile = () => {
             <Text fontWeight="bold">累計XP</Text>
             <Flex align="center">
               <Image src="/assets/icon-fire.png" alt="累計XP" width="20px" height="20px" />
-              <Text ml="2">169</Text>
+              <Text ml="2">{userData.data.xp}</Text>
             </Flex>
           </Flex>
         </Box>

@@ -28,4 +28,6 @@ export const submitAnswer = async (questId, answerId) => {
     return api.post(`/quests/${questId}/answer`, { answer: answerId });
   };
   
-  
+  export const fetchUserData = async (userId) => {
+    return api.get(`/users/${userId}/profile`);
+};
